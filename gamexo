@@ -1,0 +1,51 @@
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def check_winner(board, player):
+    # Проверка строк, столбцов и диагоналей
+    for i in range(3):
+        if all([cell == player for cell in board[i]]):
+            return True
+        if all([board[j][i] == player for j in range(3)]):
+            return True
+    if board[0][0] == board[1][1] == board[2][2] == player:
+        return True
+    if board[0][2] == board[1][1] == board[2][0] == player:
+        return True
+    return False
+
+def check_draw(board):
+    return all(cell != " " for row in board for cell in row)
+
+def main():
+    board = [[" " for _ in range(3)] for _ in range(3)]
+    players = ["X", "O"]
+    current_player = 0
+
+    while True:
+        print_board(board)
+        row = int(input(f"Player {players[current_player]}, enter the row (0, 1, 2): "))
+        col = int(input(f"Player {players[current_player]}, enter the column (0, 1, 2): "))
+
+        if board[row][col] != " ":
+            print("Cell already taken. Try again.")
+            continue
+
+        board[row][col] = players[current_player]
+
+        if check_winner(board, players[current_player]):
+            print_board(board)
+            print(f"Player {players[current_player]} wins!")
+            break
+
+        if check_draw(board):
+            print_board(board)
+            print("It's a draw!")
+            break
+
+        current_player = 1 - current_player
+
+if __name__ == "__main__":
+    main()
